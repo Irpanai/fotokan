@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class PhotoController extends Controller
 {
+    public function index(Request $request)
+    {
+        return view('fotografer.photos.index');
+    }
+
     public function store(Request $request)
     {
         $request->validate([

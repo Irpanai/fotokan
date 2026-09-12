@@ -11,6 +11,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/photographers', function () {
+    return view('photographers.index');
+})->name('photographers.index');
+
+Route::get('/photographers/{id}', function ($id) {
+    return view('photographers.show', compact('id'));
+})->name('photographers.show');
+
 Route::get('/dashboard', function () {
     $role = request()->user()->role;
     if ($role === 'superadmin') {
