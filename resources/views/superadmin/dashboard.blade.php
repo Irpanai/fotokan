@@ -7,7 +7,7 @@
                 <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">LIVE PRODUCTION CLUSTER • JAKARTA-1 (AWS S3 & CLOUDFLARE CDN SYNC)</span>
             </div>
             <p class="text-[9px] font-mono text-gray-400 mb-2">ID: CLUSTER-JKT-PRIMARY-01</p>
-            <h1 class="text-3xl font-black text-black tracking-tight mb-2">Super Admin Command Center — JEPRETCFD</h1>
+            <h1 class="text-3xl font-black text-black tracking-tight mb-2">Super Admin Command Center — JEPRET</h1>
             <p class="text-sm text-gray-500 font-medium">Pengawasan transaksi nasional, volume GMV, distribusi komisi 70/30, dan utilisasi storage cloud fotografer.</p>
         </div>
         <div class="flex items-center gap-4 shrink-0">

@@ -20,57 +20,7 @@
 <body class="antialiased overflow-x-hidden relative text-gray-900">
 
     <!-- Navbar -->
-    <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center gap-2 cursor-pointer shrink-0">
-                    <span class="font-black text-xl tracking-tighter text-black flex items-center gap-1">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
-                        JEPRETCFD
-                    </span>
-                </div>
-
-                <!-- Center Links -->
-                <div class="hidden md:flex items-center space-x-6 ml-10">
-                    <a href="#" class="text-sm font-semibold text-black">Explore</a>
-                    <a href="{{ route('photographers.index') }}" class="text-sm font-medium text-gray-500 hover:text-black transition">Photographers</a>
-                    <a href="#" class="text-sm font-medium text-gray-500 hover:text-black transition">Categories</a>
-                    <a href="#" class="text-sm font-medium text-gray-500 hover:text-black transition">How it Works</a>
-                </div>
-
-                <!-- Right Actions -->
-                <div class="flex items-center space-x-4 ml-auto">
-                    <!-- Search Navbar -->
-                    <div class="hidden lg:flex relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        </div>
-                        <input type="text" placeholder="Cari event, nomor BIB..." class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-full pl-10 pr-4 py-2 w-64 focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition">
-                    </div>
-
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-gray-700 hover:text-black transition">Dashboard</a>
-                        <a href="{{ url('/dashboard') }}" class="w-9 h-9 rounded-full overflow-hidden border border-gray-200">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=000&color=fff" alt="Avatar" class="w-full h-full object-cover">
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700 hover:text-black transition hidden sm:block">Masuk / Daftar</a>
-                        <a href="{{ route('register') }}" class="bg-black text-white text-sm font-semibold px-4 py-2 rounded-full hover:bg-gray-800 transition flex items-center gap-2">
-                            Mulai Jual <span class="bg-white text-black text-[10px] px-1.5 py-0.5 rounded-sm font-bold tracking-wider">PRO</span>
-                        </a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-        <!-- Banner under navbar -->
-        <div class="bg-green-50 border-b border-green-100 py-1.5 px-4 text-center">
-             <p class="text-[11px] font-medium text-green-800">
-                <span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1 animate-pulse"></span>
-                DAPATKAN DISKON 50% UNTUK PEMBELIAN PERTAMA DENGAN KODE: <b>JEPFIRST</b> <a href="#" class="underline ml-1">Klaim sekarang</a>
-            </p>
-        </div>
-    </nav>
+    <x-navbar />
 
     <!-- Hero Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 flex flex-col lg:flex-row gap-12 items-center">
@@ -115,7 +65,7 @@
                 <!-- Header -->
                 <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
                     <div>
-                        <h3 class="font-black text-lg text-black">JEPRETCFD</h3>
+                        <h3 class="font-black text-lg text-black">JEPRET</h3>
                         <p class="text-xs font-medium text-gray-500 uppercase tracking-widest mt-1">Live Stats</p>
                     </div>
                     <div class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 border border-green-200">
@@ -203,12 +153,12 @@
                     
                     <!-- Watermark -->
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                        <span class="text-2xl font-black text-white tracking-widest uppercase transform -rotate-45 select-none" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">JEPRETCFD</span>
+                        <span class="text-2xl font-black text-white tracking-widest uppercase transform -rotate-45 select-none" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">JEPRET</span>
                     </div>
 
                     <!-- Bottom Overlay (Hover) -->
                     <div class="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                         <button class="w-full bg-white text-black font-bold text-xs py-2 rounded-lg">Lihat Detail</button>
+                         <a href="/p/1" class="w-full bg-white text-black font-bold text-xs py-2 rounded-lg flex justify-center items-center">Lihat Detail</a>
                     </div>
                 </div>
                 
@@ -249,7 +199,7 @@
                     
                     <!-- Watermark -->
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                        <span class="text-2xl font-black text-white tracking-widest uppercase transform -rotate-45 select-none" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">JEPRETCFD</span>
+                        <span class="text-2xl font-black text-white tracking-widest uppercase transform -rotate-45 select-none" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">JEPRET</span>
                     </div>
 
                     <div class="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
@@ -294,7 +244,7 @@
                     
                     <!-- Watermark -->
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                        <span class="text-2xl font-black text-white tracking-widest uppercase transform -rotate-45 select-none" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">JEPRETCFD</span>
+                        <span class="text-2xl font-black text-white tracking-widest uppercase transform -rotate-45 select-none" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">JEPRET</span>
                     </div>
 
                     <div class="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
@@ -339,7 +289,7 @@
                     
                     <!-- Watermark -->
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                        <span class="text-2xl font-black text-white tracking-widest uppercase transform -rotate-45 select-none" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">JEPRETCFD</span>
+                        <span class="text-2xl font-black text-white tracking-widest uppercase transform -rotate-45 select-none" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">JEPRET</span>
                     </div>
 
                     <div class="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
@@ -600,7 +550,7 @@
                 <div class="flex items-center gap-2">
                     <span class="font-black text-xl tracking-tighter text-black flex items-center gap-1">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
-                        JEPRETCFD
+                        JEPRET
                     </span>
                 </div>
                 
@@ -614,7 +564,7 @@
             </div>
             
             <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-400">
-                <p>&copy; 2024 JEPRETCFD. Platform Fotografi Jalanan. All rights reserved.</p>
+                <p>&copy; 2024 JEPRET. Platform Fotografi Jalanan. All rights reserved.</p>
                 <p>Build from ground up dengan ❤ untuk Fotografer Indonesia.</p>
             </div>
         </div>

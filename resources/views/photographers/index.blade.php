@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Fotografer - JEPRETCFD</title>
+    <title>Fotografer - JEPRET</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -21,49 +21,7 @@
 <body class="antialiased flex flex-col min-h-screen relative text-gray-900 bg-[#FAFAFA]">
     
     <!-- Navbar -->
-    <nav class="bg-white sticky top-0 z-50 border-b border-gray-100">
-        <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <a href="/" class="flex items-center gap-2 cursor-pointer shrink-0">
-                    <span class="font-black text-xl tracking-tighter text-black flex items-center gap-1">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
-                        JEPRETCFD
-                    </span>
-                </a>
-
-                <!-- Center Links -->
-                <div class="hidden md:flex items-center space-x-6 ml-10">
-                    <a href="#" class="text-sm font-semibold text-black">Explore</a>
-                    <a href="{{ route('photographers.index') }}" class="text-sm font-medium text-gray-500 hover:text-black transition">Photographers</a>
-                    <a href="#" class="text-sm font-medium text-gray-500 hover:text-black transition">Categories</a>
-                    <a href="#" class="text-sm font-medium text-gray-500 hover:text-black transition">How It Works</a>
-                </div>
-
-                <!-- Right Actions -->
-                <div class="flex items-center space-x-4 ml-auto">
-                    <!-- Search Icon -->
-                    <button class="text-gray-400 hover:text-black transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </button>
-
-                    <a href="#" class="hidden lg:block text-xs font-semibold text-gray-500 hover:text-black transition">For Photographers</a>
-                    
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="hidden sm:block text-xs font-semibold text-gray-700 hover:text-black transition">Dashboard</a>
-                        <a href="{{ url('/dashboard') }}" class="w-8 h-8 rounded-full overflow-hidden border border-gray-200">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=000&color=fff" alt="Avatar" class="w-full h-full object-cover">
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="hidden sm:block text-xs font-semibold text-gray-700 hover:text-black transition">Photographer Login</a>
-                        <a href="{{ route('register') }}" class="bg-black text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-gray-800 transition shadow-sm">
-                            Mulai Menjual
-                        </a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
+    <x-navbar />
 
     <!-- Main Content -->
     <main class="flex-grow pb-24">
@@ -154,7 +112,7 @@
                     <span class="text-[10px] font-bold text-gray-400">01 / FEATURED ARCHIVE</span>
                     <h2 class="text-xl font-bold text-black">Photographer Pilihan</h2>
                 </div>
-                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest hidden sm:block">KURASI RESMI JEPRETCFD</span>
+                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest hidden sm:block">KURASI RESMI JEPRET</span>
             </div>
 
             <!-- Featured Cards Horizontal Grid -->
@@ -630,7 +588,7 @@
                 <div class="flex items-center gap-2">
                     <span class="font-black text-sm tracking-tighter text-black flex items-center gap-1">
                         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
-                        JEPRETCFD
+                        JEPRET
                     </span>
                 </div>
 
@@ -645,7 +603,7 @@
             </div>
             
             <div class="mt-6 pt-6 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-gray-400">
-                <p>&copy; 2026 JEPRETCFD Editorial Photography Archive. All rights reserved.</p>
+                <p>&copy; 2026 JEPRET Editorial Photography Archive. All rights reserved.</p>
                 <p>Built for exclusive and & editorial photographic curation.</p>
             </div>
         </div>

@@ -11,6 +11,24 @@ class PembeliController extends Controller
         return view('pembeli.dashboard');
     }
 
+
+    public function favorites()
+    {
+        $favorites = \App\Models\Photo::inRandomOrder()->limit(4)->get();
+        $totalEstimasi = $favorites->sum('harga');
+        return view('pembeli.favorites', compact('favorites', 'totalEstimasi'));
+    }
+
+    public function transactions()
+    {
+        $user = request()->user();
+        $transactions = \App\Models\Transaction::where('pembeli_id', $user->id)
+                            ->latest()
+                            ->get();
+
+        return view('pembeli.transactions', compact('transactions'));
+    }
+
     public function search(Request $request)
     {
         $query = $request->input('q');
@@ -20,6 +38,13 @@ class PembeliController extends Controller
         })->get();
 
         return view('pembeli.search', compact('photos', 'query'));
+    }
+
+    public function invoice(\App\Models\Transaction $transaction)
+    {
+        // Pastikan transaksi milik pembeli yang login
+        if ($transaction->pembeli_id !== request()->user()->id) abort(403);
+        return view('pembeli.invoice', compact('transaction'));
     }
 
     public function checkout(Request $request)
@@ -45,7 +70,7 @@ class PembeliController extends Controller
 
         // Mock Midtrans Setup Here
         // Return simulated redirect
-        return redirect()->route('pembeli.dashboard')->with('success', 'Checkout simulated. Total: ' . $totalBayar);
+        return redirect()->route('pembeli.dashboard')->with('success', 'Checkout berhasil disimulasikan. Pembayaran sebesar Rp' . number_format($totalBayar, 0, ',', '.') . ' telah diproses (Mock).');
     }
 
     public function library()

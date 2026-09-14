@@ -6,9 +6,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\FotograferController;
 use App\Http\Controllers\PembeliController;
+use App\Http\Controllers\MarketplaceController;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/p/{photo}', [MarketplaceController::class, 'show'])->name('marketplace.show');
+Route::middleware('auth')->group(function () {
+    Route::get('/p/{photo}/checkout', [MarketplaceController::class, 'checkout'])->name('marketplace.checkout');
 });
 
 Route::get('/photographers', function () {
@@ -41,6 +47,12 @@ Route::middleware(['auth', 'role:fotografer'])->prefix('fotografer')->name('foto
     Route::resource('events', \App\Http\Controllers\EventController::class);
     Route::resource('photos', \App\Http\Controllers\PhotoController::class);
     Route::post('/withdrawals', [FotograferController::class, 'withdraw'])->name('withdrawals.store');
+    
+    // Stubbed routes for missing menus
+    Route::get('/orders', [FotograferController::class, 'orders'])->name('orders');
+    Route::get('/earnings', [FotograferController::class, 'earnings'])->name('earnings');
+    Route::get('/storage', [FotograferController::class, 'storage'])->name('storage');
+    Route::get('/portfolio', [FotograferController::class, 'portfolio'])->name('portfolio');
 });
 
 Route::middleware(['auth', 'role:pembeli'])->prefix('pembeli')->name('pembeli.')->group(function () {
@@ -48,6 +60,11 @@ Route::middleware(['auth', 'role:pembeli'])->prefix('pembeli')->name('pembeli.')
     Route::get('/search', [PembeliController::class, 'search'])->name('search');
     Route::post('/checkout', [PembeliController::class, 'checkout'])->name('checkout');
     Route::get('/library', [PembeliController::class, 'library'])->name('library');
+    Route::get('/invoice/{transaction}', [PembeliController::class, 'invoice'])->name('invoice');
+    
+    // Stubbed routes for missing menus
+    Route::get('/favorites', [PembeliController::class, 'favorites'])->name('favorites');
+    Route::get('/transactions', [PembeliController::class, 'transactions'])->name('transactions');
 });
 
 Route::middleware('auth')->group(function () {

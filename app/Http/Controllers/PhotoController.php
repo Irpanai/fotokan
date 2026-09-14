@@ -8,7 +8,15 @@ class PhotoController extends Controller
 {
     public function index(Request $request)
     {
-        return view('fotografer.photos.index');
+        $events = \App\Models\Event::latest()->get();
+        return view('fotografer.photos.index', compact('events'));
+    }
+
+    public function create()
+    {
+        // Load events so photographer can choose which event to upload photos for
+        $events = \App\Models\Event::latest()->get();
+        return view('fotografer.photos.create', compact('events'));
     }
 
     public function store(Request $request)

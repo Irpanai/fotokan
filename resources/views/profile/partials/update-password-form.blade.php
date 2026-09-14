@@ -1,11 +1,11 @@
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Update Password') }}
+        <h2 class="text-xl font-black text-gray-900 tracking-tight">
+            {{ __('Ubah Kata Sandi') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
+        <p class="mt-1 text-xs text-gray-500 font-medium">
+            {{ __('Pastikan akun Anda menggunakan kata sandi yang panjang dan acak agar tetap aman.') }}
         </p>
     </header>
 
@@ -31,8 +31,10 @@
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+        <div class="flex items-center gap-4 pt-4 border-t border-gray-100">
+            <button type="submit" class="bg-black hover:bg-gray-800 text-white font-bold px-6 py-2.5 rounded-lg text-sm transition-colors shadow-sm">
+                {{ __('Perbarui Sandi') }}
+            </button>
 
             @if (session('status') === 'password-updated')
                 <p
@@ -40,8 +42,11 @@
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                    class="text-xs font-bold text-green-600 flex items-center gap-1 bg-green-50 px-2 py-1 rounded"
+                >
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    {{ __('Tersimpan.') }}
+                </p>
             @endif
         </div>
     </form>

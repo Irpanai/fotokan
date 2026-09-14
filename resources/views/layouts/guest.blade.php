@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'JEPRETCFD') }}</title>
+    <title>{{ config('app.name', 'JEPRET') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -28,7 +28,7 @@
                 <!-- Logo -->
                 <a href="/" class="flex items-center gap-2 cursor-pointer shrink-0">
                     <span class="font-black text-xl tracking-tighter text-black flex items-center gap-1">
-                        JEPRETCFD
+                        JEPRET
                     </span>
                 </a>
 
@@ -76,7 +76,7 @@
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-500">
                 <div class="flex items-center gap-2">
-                    <span class="font-bold text-gray-800">JEPRETCFD &copy; 2025</span>
+                    <span class="font-bold text-gray-800">JEPRET &copy; 2025</span>
                     <span class="text-gray-300">&middot;</span>
                     <span>Museum-grade architectural photography repository</span>
                 </div>

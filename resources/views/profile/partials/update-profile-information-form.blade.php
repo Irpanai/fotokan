@@ -1,11 +1,11 @@
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
+        <h2 class="text-xl font-black text-gray-900 tracking-tight">
+            {{ __('Informasi Profil') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
+        <p class="mt-1 text-xs text-gray-500 font-medium">
+            {{ __("Perbarui informasi profil akun Anda dan alamat email.") }}
         </p>
     </header>
 
@@ -47,8 +47,10 @@
             @endif
         </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+        <div class="flex items-center gap-4 pt-4 border-t border-gray-100">
+            <button type="submit" class="bg-black hover:bg-gray-800 text-white font-bold px-6 py-2.5 rounded-lg text-sm transition-colors shadow-sm">
+                {{ __('Simpan Perubahan') }}
+            </button>
 
             @if (session('status') === 'profile-updated')
                 <p
@@ -56,8 +58,11 @@
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                    class="text-xs font-bold text-green-600 flex items-center gap-1 bg-green-50 px-2 py-1 rounded"
+                >
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    {{ __('Tersimpan.') }}
+                </p>
             @endif
         </div>
     </form>

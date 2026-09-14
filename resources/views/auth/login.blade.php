@@ -14,7 +14,7 @@
                 </h1>
                 
                 <p class="text-gray-500 text-sm leading-relaxed max-w-md">
-                    Baik sebagai pelari, pesepeda, peserta festival, maupun juru kamera lapangan—JEPRETCFD menyatukan momen autentik dalam resolusi museum.
+                    Baik sebagai pelari, pesepeda, peserta festival, maupun juru kamera lapangan—JEPRET menyatukan momen autentik dalam resolusi museum.
                 </p>
             </div>
 

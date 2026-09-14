@@ -26,8 +26,8 @@
     </div>
 
     <!-- Upload & Calculator Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        
+    <form action="{{ route('fotografer.photos.store') }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        @csrf
         <!-- Upload Box -->
         <div class="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm flex flex-col">
             <div class="flex justify-between items-center mb-6">
@@ -35,49 +35,56 @@
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <span class="text-xs font-bold text-black uppercase tracking-widest">UPLOAD STUDIO ENGINE</span>
                 </div>
-                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">RAW, JPEG, PNG • MAX 50MB</span>
+                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">RAW, JPEG, PNG • MAX 10MB</span>
             </div>
 
-            <!-- Dropzone -->
-            <div class="border-2 border-dashed border-gray-300 rounded-xl bg-gray-50/50 flex flex-col items-center justify-center py-12 mb-4 hover:bg-gray-50 transition cursor-pointer flex-grow">
-                <div class="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center mb-4">
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+            <!-- Event Selection -->
+            <div class="mb-4">
+                <label for="event_id" class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Pilih Event Olahraga</label>
+                <select name="event_id" id="event_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-0 focus:border-black transition-colors" required>
+                    <option value="">-- Pilih Event --</option>
+                    @foreach($events as $event)
+                        <option value="{{ $event->id }}" {{ old('event_id') == $event->id ? 'selected' : '' }}>
+                            {{ $event->nama_event }} - {{ \Carbon\Carbon::parse($event->tanggal)->format('d M Y') }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Dropzone (File Input) -->
+            <div class="border-2 border-dashed border-gray-300 rounded-xl bg-gray-50/50 flex flex-col items-center justify-center py-8 hover:border-black hover:bg-gray-50 transition relative overflow-hidden group flex-grow mb-4">
+                <input type="file" name="photo" id="photo" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/jpeg,image/png,image/jpg" required>
+                <div class="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center mb-4 group-hover:bg-black group-hover:border-black group-hover:text-white transition-colors">
+                    <svg class="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                 </div>
-                <h3 class="text-base font-bold text-black mb-1">Tarik & Lepas Foto Asli di Sini</h3>
-                <p class="text-[10px] text-gray-500 font-medium mb-4">atau <span class="text-black font-bold underline">Pilih Berkas dari Komputer</span></p>
+                <h3 class="text-base font-bold text-black mb-1">Pilih atau Tarik File Ke Sini</h3>
+                <p class="text-[10px] text-gray-500 font-medium mb-4">Maksimal ukuran file 10MB.</p>
                 <div class="flex gap-2">
-                    <span class="px-2 py-1 bg-white border border-gray-200 rounded text-[9px] font-bold text-gray-400">Canon CR3</span>
-                    <span class="px-2 py-1 bg-white border border-gray-200 rounded text-[9px] font-bold text-gray-400">Sony ARW</span>
-                    <span class="px-2 py-1 bg-white border border-gray-200 rounded text-[9px] font-bold text-gray-400">Nikon NEF</span>
-                    <span class="px-2 py-1 bg-white border border-gray-200 rounded text-[9px] font-bold text-gray-400">Lossless JPG</span>
+                    <span class="px-2 py-1 bg-white border border-gray-200 rounded text-[9px] font-bold text-gray-400">JPG</span>
+                    <span class="px-2 py-1 bg-white border border-gray-200 rounded text-[9px] font-bold text-gray-400">PNG</span>
                 </div>
             </div>
-
-            <!-- Upload Progress Mockup -->
-            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                    <div>
-                        <h4 class="text-[10px] font-bold text-black">3 foto siap dipublikasikan ke event "Lapangan Murjani CFD 2026"</h4>
-                        <p class="text-[9px] font-medium text-gray-400">Folder Target: /CFD-BANJARBARU-2026/SESSION-04</p>
-                    </div>
+            
+            @if ($errors->any())
+                <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <ul class="list-disc list-inside text-[10px] font-bold text-red-600">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-                <div class="flex gap-2 shrink-0">
-                    <button class="px-4 py-2 bg-white border border-gray-200 text-gray-500 hover:text-black text-[10px] font-bold rounded-lg transition">Batal</button>
-                    <button class="px-4 py-2 bg-black text-white text-[10px] font-bold rounded-lg hover:bg-gray-800 transition">Proses Metadata & Unggah</button>
-                </div>
-            </div>
+            @endif
         </div>
 
         <!-- Calculator Box -->
-        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between" x-data="{ harga: 20000 }">
             <div>
                 <div class="flex justify-between items-start mb-6">
                     <div class="flex items-center gap-2 text-black">
                         <span class="font-bold text-lg">%</span>
-                        <h3 class="text-xs font-bold uppercase tracking-widest">KALKULATOR BAGI HASIL (70 / 30)</h3>
+                        <h3 class="text-xs font-bold uppercase tracking-widest">KALKULATOR BAGI HASIL</h3>
                     </div>
-                    <span class="bg-green-100 text-green-700 text-[9px] font-bold px-2 py-1 rounded">Skema Otomatis</span>
+                    <span class="bg-green-100 text-green-700 text-[9px] font-bold px-2 py-1 rounded">Skema 70/30</span>
                 </div>
 
                 <div class="mb-4">
@@ -86,7 +93,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <span class="text-gray-400 text-xs font-bold">Rp</span>
                         </div>
-                        <input type="text" value="20000" class="block w-full pl-8 pr-3 py-3 border border-gray-200 rounded-lg leading-5 bg-white text-black font-black text-lg focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition">
+                        <input type="number" name="harga" x-model="harga" required min="0" class="block w-full pl-8 pr-3 py-3 border border-gray-200 rounded-lg leading-5 bg-white text-black font-black text-lg focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition">
                     </div>
                     <p class="text-[9px] font-medium text-gray-400 mt-2 leading-relaxed">Rekomendasi harga event CFD umum: Rp15.000 - Rp25.000</p>
                 </div>
@@ -94,7 +101,7 @@
                 <div class="border-t border-gray-200 pt-4 mb-4">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-[10px] font-bold text-gray-500">Harga Jual Pembeli (100%)</span>
-                        <span class="text-[10px] font-bold text-gray-400 line-through">Rp 20.000</span>
+                        <span class="text-[10px] font-bold text-gray-400 line-through" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(harga)">Rp 20.000</span>
                     </div>
                     <div class="bg-white border border-gray-200 rounded-xl p-4 flex justify-between items-center shadow-sm">
                         <div class="flex items-center gap-2">
@@ -103,12 +110,12 @@
                         </div>
                         <div class="text-right">
                             <span class="text-[10px] font-bold text-black block mb-0.5">Rp</span>
-                            <span class="text-xl font-black text-black leading-none">14.000</span>
+                            <span class="text-xl font-black text-black leading-none" x-text="new Intl.NumberFormat('id-ID').format(Math.floor(harga * 0.7))">14.000</span>
                         </div>
                     </div>
                     <div class="flex justify-between items-center mt-3">
                         <span class="text-[10px] font-bold text-gray-500">Biaya Platform & Server CDN (30%)</span>
-                        <span class="text-[10px] font-bold text-gray-400">Rp 6.000</span>
+                        <span class="text-[10px] font-bold text-gray-400" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(Math.ceil(harga * 0.3))">Rp 6.000</span>
                     </div>
                     <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden mt-2 flex">
                         <div class="h-full bg-black rounded-l-full" style="width: 70%;"></div>
@@ -117,14 +124,14 @@
                 </div>
             </div>
 
-            <div class="bg-white border border-gray-200 rounded-xl p-4 flex items-start gap-3">
-                <svg class="w-4 h-4 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                <p class="text-[9px] text-gray-500 leading-relaxed font-medium">
-                    <span class="font-bold text-black">Watermark Proteksi Aktif:</span> Setiap foto yang diunggah akan otomatis disematkan watermark kriptis JEPRETCFD untuk proteksi pratinjau publik, resolusi penuh hanya dibuka setelah transaksi sukses.
-                </p>
+            <div class="mt-4 border-t border-gray-200 pt-4 flex flex-col gap-3">
+                <button type="submit" class="w-full bg-black text-white text-xs font-bold px-6 py-3.5 rounded-lg shadow-sm hover:bg-gray-800 flex items-center justify-center gap-2 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                    Unggah & Terbitkan Sekarang
+                </button>
             </div>
         </div>
-    </div>
+    </form>
 
     <!-- Catalog Section -->
     <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden mb-8">
@@ -182,7 +189,7 @@
                 <div class="relative w-full aspect-video bg-gray-100 overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1552674605-15c2145e9ca4?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale" alt="Preview">
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <span class="text-lg font-black text-white/50 tracking-widest uppercase transform -rotate-12 border border-white/30 px-3 py-1 rounded">© JEPRETCFD PREVIEW</span>
+                        <span class="text-lg font-black text-white/50 tracking-widest uppercase transform -rotate-12 border border-white/30 px-3 py-1 rounded">© JEPRET PREVIEW</span>
                     </div>
                 </div>
                 
@@ -230,7 +237,7 @@
                 <div class="relative w-full aspect-video bg-gray-100 overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-90" alt="Preview">
                     <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
-                        <span class="text-lg font-black text-white/50 tracking-widest uppercase transform -rotate-12 border border-white/30 px-3 py-1 rounded">© JEPRETCFD PREVIEW</span>
+                        <span class="text-lg font-black text-white/50 tracking-widest uppercase transform -rotate-12 border border-white/30 px-3 py-1 rounded">© JEPRET PREVIEW</span>
                     </div>
                 </div>
                 
@@ -278,7 +285,7 @@
                 <div class="relative w-full aspect-video bg-gray-100 overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale" alt="Preview">
                     <div class="absolute inset-0 bg-black/60 flex items-center justify-center">
-                        <span class="text-lg font-black text-white/40 tracking-widest uppercase transform -rotate-12 border border-white/20 px-3 py-1 rounded">© JEPRETCFD PREVIEW</span>
+                        <span class="text-lg font-black text-white/40 tracking-widest uppercase transform -rotate-12 border border-white/20 px-3 py-1 rounded">© JEPRET PREVIEW</span>
                     </div>
                 </div>
                 

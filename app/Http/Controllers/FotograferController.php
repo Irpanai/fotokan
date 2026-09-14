@@ -63,4 +63,24 @@ class FotograferController extends Controller
 
         return back()->with('success', 'Withdrawal requested.');
     }
+
+    public function orders()
+    {
+        return view('fotografer.orders');
+    }
+
+    public function earnings()
+    {
+        return view('fotografer.earnings');
+    }
+
+    public function storage()
+    {
+        return view('fotografer.storage');
+    }
+
+    public function portfolio()
+    {
+        return view('fotografer.portfolio');
+    }
 }

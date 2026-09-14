@@ -19,6 +19,11 @@ class Photo extends Model
         return $this->belongsTo(Event::class);
     }
 
+    public function fotografer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'fotografer_id');
+    }
+
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);

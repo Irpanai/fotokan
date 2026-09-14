@@ -151,7 +151,7 @@
 
                     <label class="flex items-start gap-2 pt-2 cursor-pointer">
                         <input type="checkbox" name="terms" class="mt-0.5 w-4 h-4 rounded border-gray-300 text-black focus:ring-black" required>
-                        <span class="text-xs font-medium text-gray-600">Saya menyetujui <a href="#" class="text-black underline hover:text-gray-700">Ketentuan Layanan</a> dan <a href="#" class="text-black underline hover:text-gray-700">Kebijakan Privasi</a> JEPRETCFD.</span>
+                        <span class="text-xs font-medium text-gray-600">Saya menyetujui <a href="#" class="text-black underline hover:text-gray-700">Ketentuan Layanan</a> dan <a href="#" class="text-black underline hover:text-gray-700">Kebijakan Privasi</a> JEPRET.</span>
                     </label>
 
                     <button type="submit" class="w-full bg-black hover:bg-gray-900 text-white font-semibold py-3.5 rounded-lg transition flex items-center justify-center gap-2 text-sm mt-4">
