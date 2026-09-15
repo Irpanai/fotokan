@@ -37,48 +37,45 @@
                 
                 <nav class="space-y-1">
                     @php
-                        $isDashboard = request()->routeIs('fotografer.dashboard');
-                        $isPhotos = request()->routeIs('fotografer.photos.*');
+                        $rolePrefix = Auth::user()->role === 'superadmin' ? 'superadmin.' : 'fotografer.';
+                        $isDashboard = request()->routeIs($rolePrefix . 'dashboard');
+                        $isPhotos = request()->routeIs($rolePrefix . 'photos.*') || request()->routeIs($rolePrefix . 'photos');
                     @endphp
                     
                     <!-- Overview -->
-                    <a href="{{ route('fotografer.dashboard') ?? '#' }}" :class="sidebarOpen ? 'px-3 justify-start' : 'justify-center'" class="flex items-center gap-3 py-2.5 rounded-lg text-sm font-semibold transition {{ $isDashboard ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-100' }}" :title="!sidebarOpen ? 'Ringkasan' : ''">
+                    <a href="{{ route($rolePrefix . 'dashboard') ?? '#' }}" :class="sidebarOpen ? 'px-3 justify-start' : 'justify-center'" class="flex items-center gap-3 py-2.5 rounded-lg text-sm font-semibold transition {{ $isDashboard ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-100' }}" :title="!sidebarOpen ? 'Ringkasan' : ''">
                         <svg class="w-5 h-5 shrink-0 {{ $isDashboard ? 'text-white' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                         <span x-show="sidebarOpen" class="whitespace-nowrap">Ringkasan</span>
                     </a>
                     
                     <!-- Photos -->
-                    <a href="/fotografer/photos" :class="sidebarOpen ? 'px-3 justify-start' : 'justify-center'" class="flex items-center gap-3 py-2.5 rounded-lg text-sm font-semibold transition {{ $isPhotos ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-100' }}" :title="!sidebarOpen ? 'Foto' : ''">
+                    <a href="{{ Auth::user()->role === 'superadmin' ? route('superadmin.photos') : route('fotografer.photos.index') }}" :class="sidebarOpen ? 'px-3 justify-start' : 'justify-center'" class="flex items-center gap-3 py-2.5 rounded-lg text-sm font-semibold transition {{ $isPhotos ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-100' }}" :title="!sidebarOpen ? 'Foto' : ''">
                         <svg class="w-5 h-5 shrink-0 {{ $isPhotos ? 'text-white' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span x-show="sidebarOpen" class="whitespace-nowrap">Foto</span>
                     </a>
                     
 
                     <!-- Orders & Transactions -->
-                    <!-- Orders & Transactions -->
-                    <a href="{{ route('fotografer.orders') }}" :class="sidebarOpen ? 'px-3 justify-start' : 'justify-center'" class="flex items-center gap-3 py-2.5 rounded-lg text-sm font-semibold transition {{ request()->routeIs('fotografer.orders') ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-100' }}" :title="!sidebarOpen ? 'Pesanan & Transaksi' : ''">
-                        <svg class="w-5 h-5 shrink-0 {{ request()->routeIs('fotografer.orders') ? 'text-white' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <a href="{{ route($rolePrefix . 'orders') }}" :class="sidebarOpen ? 'px-3 justify-start' : 'justify-center'" class="flex items-center gap-3 py-2.5 rounded-lg text-sm font-semibold transition {{ request()->routeIs($rolePrefix . 'orders') ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-100' }}" :title="!sidebarOpen ? 'Pesanan & Transaksi' : ''">
+                        <svg class="w-5 h-5 shrink-0 {{ request()->routeIs($rolePrefix . 'orders') ? 'text-white' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         <span x-show="sidebarOpen" class="whitespace-nowrap">Pesanan & Transaksi</span>
                     </a>
                     
                     <!-- Earnings & Payouts -->
-                    <!-- Earnings & Payouts -->
-                    <a href="{{ route('fotografer.earnings') }}" :class="sidebarOpen ? 'px-3 justify-start' : 'justify-center'" class="flex items-center gap-3 py-2.5 rounded-lg text-sm font-semibold transition {{ request()->routeIs('fotografer.earnings') ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-100' }}" :title="!sidebarOpen ? 'Pendapatan & Pencairan' : ''">
-                        <svg class="w-5 h-5 shrink-0 {{ request()->routeIs('fotografer.earnings') ? 'text-white' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <a href="{{ route($rolePrefix . 'earnings') }}" :class="sidebarOpen ? 'px-3 justify-start' : 'justify-center'" class="flex items-center gap-3 py-2.5 rounded-lg text-sm font-semibold transition {{ request()->routeIs($rolePrefix . 'earnings') ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-100' }}" :title="!sidebarOpen ? 'Pendapatan & Pencairan' : ''">
+                        <svg class="w-5 h-5 shrink-0 {{ request()->routeIs($rolePrefix . 'earnings') ? 'text-white' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         <span x-show="sidebarOpen" class="whitespace-nowrap">Pendapatan & Pencairan</span>
                     </a>
                     
                     <!-- Storage Usage -->
-                    <!-- Storage Usage -->
-                    <a href="{{ route('fotografer.storage') }}" :class="sidebarOpen ? 'px-3 justify-start' : 'justify-center'" class="flex items-center gap-3 py-2.5 rounded-lg text-sm font-semibold transition {{ request()->routeIs('fotografer.storage') ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-100' }}" :title="!sidebarOpen ? 'Penggunaan Storage' : ''">
-                        <svg class="w-5 h-5 shrink-0 {{ request()->routeIs('fotografer.storage') ? 'text-white' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                    <a href="{{ route($rolePrefix . 'storage') }}" :class="sidebarOpen ? 'px-3 justify-start' : 'justify-center'" class="flex items-center gap-3 py-2.5 rounded-lg text-sm font-semibold transition {{ request()->routeIs($rolePrefix . 'storage') ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-100' }}" :title="!sidebarOpen ? 'Penggunaan Storage' : ''">
+                        <svg class="w-5 h-5 shrink-0 {{ request()->routeIs($rolePrefix . 'storage') ? 'text-white' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
                         <span x-show="sidebarOpen" class="whitespace-nowrap">Penggunaan Storage</span>
                     </a>
                     
                     <!-- Profile & Portfolio -->
-                    <!-- Profile & Portfolio -->
-                    <a href="{{ route('fotografer.portfolio') }}" :class="sidebarOpen ? 'px-3 justify-start' : 'justify-center'" class="flex items-center gap-3 py-2.5 rounded-lg text-sm font-semibold transition {{ request()->routeIs('fotografer.portfolio') ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-100' }}" :title="!sidebarOpen ? 'Profil & Portofolio' : ''">
-                        <svg class="w-5 h-5 shrink-0 {{ request()->routeIs('fotografer.portfolio') ? 'text-white' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    <a href="{{ route($rolePrefix . 'portfolio') }}" :class="sidebarOpen ? 'px-3 justify-start' : 'justify-center'" class="flex items-center gap-3 py-2.5 rounded-lg text-sm font-semibold transition {{ request()->routeIs($rolePrefix . 'portfolio') ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-100' }}" :title="!sidebarOpen ? 'Profil & Portofolio' : ''">
+                        <svg class="w-5 h-5 shrink-0 {{ request()->routeIs($rolePrefix . 'portfolio') ? 'text-white' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         <span x-show="sidebarOpen" class="whitespace-nowrap">Profil & Portofolio</span>
                     </a>
                     

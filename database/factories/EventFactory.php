@@ -18,7 +18,10 @@ class EventFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'fotografer_id' => \App\Models\User::factory()->fotografer(),
+            'nama_event' => 'CFD ' . fake()->city(),
+            'tanggal_event' => fake()->dateTimeBetween('-1 month', 'now')->format('Y-m-d'),
+            'lokasi' => fake()->address(),
         ];
     }
 }

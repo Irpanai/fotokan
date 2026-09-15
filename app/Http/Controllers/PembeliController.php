@@ -65,12 +65,18 @@ class PembeliController extends Controller
             'harga_foto' => $photo->harga,
             'tip_amount' => $tipAmount,
             'total_bayar' => $totalBayar,
-            'status' => 'pending',
+            'status' => 'paid',
         ]);
 
         // Mock Midtrans Setup Here
+        // Karena ini mock dan status langsung PAID, kita tambahkan saldo ke Fotografer
+        $fotografer = $photo->fotografer;
+        if ($fotografer) {
+            $fotografer->increment('saldo', $photo->net_harga + $tipAmount);
+        }
+
         // Return simulated redirect
-        return redirect()->route('pembeli.dashboard')->with('success', 'Checkout berhasil disimulasikan. Pembayaran sebesar Rp' . number_format($totalBayar, 0, ',', '.') . ' telah diproses (Mock).');
+        return redirect()->route('pembeli.library')->with('success', 'Pembayaran sebesar Rp' . number_format($totalBayar, 0, ',', '.') . ' berhasil! Foto sekarang tersedia di Library Anda.');
     }
 
     public function library()

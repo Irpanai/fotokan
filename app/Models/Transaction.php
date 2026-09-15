@@ -22,4 +22,14 @@ class Transaction extends Model
     {
         return $this->belongsTo(User::class, 'pembeli_id');
     }
+
+    public function getJumlahFotograferAttribute()
+    {
+        return $this->photo ? $this->photo->net_harga + $this->tip_amount : 0;
+    }
+
+    public function getJumlahPlatformAttribute()
+    {
+        return $this->photo ? $this->harga_foto - $this->photo->net_harga : 0;
+    }
 }

@@ -28,4 +28,9 @@ class Photo extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function getNetHargaAttribute()
+    {
+        return $this->harga * 0.70; // 70% to photographer
+    }
 }

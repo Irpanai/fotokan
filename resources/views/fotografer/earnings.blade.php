@@ -28,7 +28,7 @@
                         </div>
                         <span class="bg-green-50 text-green-600 text-[9px] font-bold px-2 py-1 rounded">Tersedia</span>
                     </div>
-                    <h3 class="text-4xl font-black text-black mb-2">Rp1.420.000</h3>
+                    <h3 class="text-4xl font-black text-black mb-2">Rp{{ number_format($user->saldo, 0, ',', '.') }}</h3>
                     <p class="text-[10px] text-gray-500 font-medium leading-relaxed">
                         Pendapatan bersih (70%) dari penjualan foto.
                     </p>
@@ -38,19 +38,19 @@
             <!-- Total Pendapatan Card -->
             <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm flex flex-col justify-center">
                 <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">TOTAL PENDAPATAN KESELURUHAN</span>
-                <h3 class="text-3xl font-black text-black">Rp12.840.000</h3>
+                <h3 class="text-3xl font-black text-black">Rp{{ number_format($totalEarnings, 0, ',', '.') }}</h3>
                 <p class="text-[10px] text-green-500 font-bold mt-2 flex items-center gap-1">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
-                    +14.2% bulan ini
+                    Statistik penjualan Anda
                 </p>
             </div>
 
             <!-- Total Penarikan Card -->
             <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm flex flex-col justify-center">
                 <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">TOTAL PENARIKAN BERHASIL</span>
-                <h3 class="text-3xl font-black text-black">Rp11.420.000</h3>
+                <h3 class="text-3xl font-black text-black">Rp{{ number_format($withdrawals->where('status', 'success')->sum('jumlah_tarik'), 0, ',', '.') }}</h3>
                 <p class="text-[10px] text-gray-400 font-medium mt-2">
-                    Riwayat penarikan bersih.
+                    Riwayat penarikan berhasil Anda.
                 </p>
             </div>
         </div>
@@ -73,24 +73,33 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 bg-white text-xs font-medium">
-                        <!-- Dummy Data -->
-                        @for($i = 1; $i <= 5; $i++)
+                        @forelse($withdrawals as $wd)
                         <tr class="hover:bg-gray-50/50 transition">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="font-bold text-black">#WD-00{{ $i }}</span>
+                                <span class="font-bold text-black">#WD-{{ str_pad($wd->id, 3, '0', STR_PAD_LEFT) }}</span>
                             </td>
                             <td class="px-6 py-4 font-bold text-black">
-                                Rp2.500.000
+                                Rp{{ number_format($wd->jumlah_tarik, 0, ',', '.') }}
                             </td>
                             <td class="px-6 py-4 text-gray-500">
-                                Transfer BCA - 82****321
+                                {{ $wd->metode_pembayaran }} - {{ $wd->nomor_tujuan }}
                             </td>
                             <td class="px-6 py-4">
-                                <span class="bg-green-50 text-green-700 text-[9px] font-bold px-2 py-1 rounded border border-green-200">BERHASIL</span>
+                                @if($wd->status === 'success')
+                                    <span class="bg-green-50 text-green-700 text-[9px] font-bold px-2 py-1 rounded border border-green-200">BERHASIL</span>
+                                @elseif($wd->status === 'pending')
+                                    <span class="bg-yellow-50 text-yellow-700 text-[9px] font-bold px-2 py-1 rounded border border-yellow-200">MENUNGGU</span>
+                                @else
+                                    <span class="bg-red-50 text-red-700 text-[9px] font-bold px-2 py-1 rounded border border-red-200">DITOLAK</span>
+                                @endif
                             </td>
-                            <td class="px-6 py-4 text-right text-[10px] text-gray-400">0{{ $i }} Jan 2026</td>
+                            <td class="px-6 py-4 text-right text-[10px] text-gray-400">{{ $wd->created_at->format('d M Y') }}</td>
                         </tr>
-                        @endfor
+                        @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-gray-500 text-xs font-medium">Belum ada riwayat penarikan.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

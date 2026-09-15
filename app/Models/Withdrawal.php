@@ -13,8 +13,8 @@ class Withdrawal extends Model
 
     protected $guarded = ['id'];
 
-    public function user(): BelongsTo
+    public function fotografer(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'fotografer_id');
     }
 }

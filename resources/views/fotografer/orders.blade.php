@@ -49,32 +49,39 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 bg-white text-xs font-medium">
-                        <!-- Dummy Data -->
-                        @for($i = 1; $i <= 5; $i++)
+                        @forelse($transactions as $trx)
                         <tr class="hover:bg-gray-50/50 transition">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="font-bold text-black">#ORD-{{ 8000 + $i }}</span>
+                                <span class="font-bold text-black">#ORD-{{ str_pad($trx->id, 4, '0', STR_PAD_LEFT) }}</span>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-gray-100 rounded overflow-hidden">
-                                        <img src="https://images.unsplash.com/photo-1552674605-15c2145e9ca4?q=80&w=100&auto=format&fit=crop" class="w-full h-full object-cover grayscale">
+                                        <img src="{{ \Illuminate\Support\Facades\Storage::url($trx->photo->file_watermark) }}" class="w-full h-full object-cover">
                                     </div>
                                     <div>
-                                        <p class="font-bold text-black">Pelari 10K Finish</p>
-                                        <p class="text-[10px] text-gray-400">Banjarbaru 10K 2026</p>
+                                        <p class="font-bold text-black truncate max-w-[150px]">{{ basename($trx->photo->file_asli) }}</p>
+                                        <p class="text-[10px] text-gray-400">{{ $trx->photo->event->nama_event ?? 'Unknown Event' }}</p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-gray-500">pembeli{{ $i }}@gmail.com</td>
-                            <td class="px-6 py-4">Rp25.000</td>
-                            <td class="px-6 py-4 font-bold text-black">Rp17.500</td>
+                            <td class="px-6 py-4 text-gray-500">{{ $trx->pembeli->email ?? 'Guest' }}</td>
+                            <td class="px-6 py-4">Rp{{ number_format($trx->harga_foto, 0, ',', '.') }}</td>
+                            <td class="px-6 py-4 font-bold text-black">Rp{{ number_format($trx->photo->net_harga, 0, ',', '.') }}</td>
                             <td class="px-6 py-4">
-                                <span class="bg-green-50 text-green-700 text-[9px] font-bold px-2 py-1 rounded border border-green-200">LUNAS</span>
+                                @if($trx->status === 'paid')
+                                    <span class="bg-green-50 text-green-700 text-[9px] font-bold px-2 py-1 rounded border border-green-200">LUNAS</span>
+                                @else
+                                    <span class="bg-yellow-50 text-yellow-700 text-[9px] font-bold px-2 py-1 rounded border border-yellow-200">PENDING</span>
+                                @endif
                             </td>
-                            <td class="px-6 py-4 text-right text-[10px] text-gray-400">{{ $i }} jam yang lalu</td>
+                            <td class="px-6 py-4 text-right text-[10px] text-gray-400">{{ $trx->created_at->diffForHumans() }}</td>
                         </tr>
-                        @endfor
+                        @empty
+                        <tr>
+                            <td colspan="7" class="px-6 py-12 text-center text-gray-500 text-xs font-medium">Belum ada transaksi.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

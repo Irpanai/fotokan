@@ -64,19 +64,66 @@ class FotograferController extends Controller
         return back()->with('success', 'Withdrawal requested.');
     }
 
-    public function orders()
+    public function orders(Request $request)
     {
-        return view('fotografer.orders');
+        $user = $request->user();
+        $transactions = \App\Models\Transaction::whereHas('photo', function ($q) use ($user) {
+            $q->where('fotografer_id', $user->id);
+        })->with(['photo', 'pembeli'])->latest()->get();
+
+        return view('fotografer.orders', compact('transactions'));
     }
 
-    public function earnings()
+    public function earnings(Request $request)
     {
-        return view('fotografer.earnings');
+        $user = $request->user();
+        
+        $transactions = \App\Models\Transaction::whereHas('photo', function ($q) use ($user) {
+            $q->where('fotografer_id', $user->id);
+        })->where('status', 'paid')->latest()->get();
+        
+        $withdrawals = \App\Models\Withdrawal::where('fotografer_id', $user->id)
+            ->latest()
+            ->get();
+            
+        $totalEarnings = $transactions->sum(function($t) {
+            return $t->photo->net_harga + $t->tip_amount;
+        });
+
+        return view('fotografer.earnings', compact('transactions', 'withdrawals', 'totalEarnings', 'user'));
     }
 
-    public function storage()
+    public function storage(Request $request)
     {
-        return view('fotografer.storage');
+        $user = $request->user();
+        
+        $events = \App\Models\Event::where('fotografer_id', $user->id)
+            ->with('photos') // Load photos
+            ->withCount('photos')
+            ->get();
+            
+        $folders = $events->map(function ($event) {
+            return [
+                'id' => $event->id,
+                'name' => $event->nama_event,
+                'count' => $event->photos_count,
+                'size' => ($event->photos_count * 15) . ' MB', 
+                'photos' => $event->photos->map(function ($photo) {
+                    return [
+                        'id' => $photo->id,
+                        'name' => basename($photo->file_asli),
+                        'size' => '15 MB',
+                        'url' => \Illuminate\Support\Facades\Storage::url($photo->file_watermark)
+                    ];
+                })
+            ];
+        });
+
+        $package = $user->package ?? \App\Models\Package::where('nama_paket', 'Basic')->first();
+        $storageTerpakai = $user->storage_terpakai_mb;
+        $kuota = $package ? $package->kuota_storage_mb : 5000;
+        
+        return view('fotografer.storage', compact('events', 'folders', 'storageTerpakai', 'kuota', 'package'));
     }
 
     public function portfolio()

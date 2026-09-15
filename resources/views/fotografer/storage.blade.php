@@ -56,12 +56,13 @@
              x-data="{ 
                  activeFolder: null, 
                  previewIndex: null,
-                 photos: Array.from({length: 10}, (_, i) => ({
-                     id: i,
-                     name: 'IMG_' + (8800 + i + 1) + '.RAW',
-                     size: (24 + (i % 9) + 1) + '.' + (i % 9 + 1) + ' MB',
-                     url: 'https://images.unsplash.com/photo-1552674605-15c2145e9ca4?q=80&w=800&auto=format&fit=crop&sig=' + i
-                 }))
+                 folders: {{ Js::from($folders) }},
+                 get photos() {
+                     return this.activeFolder ? this.folders.find(f => f.id === this.activeFolder)?.photos || [] : [];
+                 },
+                 get activeFolderName() {
+                     return this.activeFolder ? this.folders.find(f => f.id === this.activeFolder)?.name : '';
+                 }
              }">
             
             <!-- Header -->
@@ -71,7 +72,7 @@
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                         Kembali
                     </button>
-                    <h3 class="text-sm font-bold text-black" x-text="activeFolder ? 'Folder: ' + activeFolder : 'Manajemen Folder Master'">Manajemen Folder Master</h3>
+                    <h3 class="text-sm font-bold text-black" x-text="activeFolder ? 'Folder: ' + activeFolderName : 'Manajemen Folder Master'">Manajemen Folder Master</h3>
                 </div>
                 <div class="relative max-w-sm w-full md:w-64" x-show="activeFolder" x-cloak>
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -94,31 +95,24 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 bg-white text-xs font-medium">
-                            <tr class="hover:bg-gray-50/50 transition cursor-pointer group" @click="activeFolder = 'Banjarbaru 10K Run'">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-8 h-8 text-gray-300 group-hover:text-black transition" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"></path></svg>
-                                        <span class="font-bold text-black text-sm">Banjarbaru 10K Run</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">1,240 Foto</td>
-                                <td class="px-6 py-4 font-bold text-black">18.5 GB</td>
-                                <td class="px-6 py-4 text-right">
-                                    <button class="text-black bg-white border border-gray-200 shadow-sm hover:bg-gray-50 px-4 py-2 rounded-lg text-[10px] font-bold transition">Buka Folder</button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-gray-50/50 transition cursor-pointer group" @click="activeFolder = 'CFD Murjani'">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-8 h-8 text-gray-300 group-hover:text-black transition" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"></path></svg>
-                                        <span class="font-bold text-black text-sm">CFD Murjani</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">850 Foto</td>
-                                <td class="px-6 py-4 font-bold text-black">12.1 GB</td>
-                                <td class="px-6 py-4 text-right">
-                                    <button class="text-black bg-white border border-gray-200 shadow-sm hover:bg-gray-50 px-4 py-2 rounded-lg text-[10px] font-bold transition">Buka Folder</button>
-                                </td>
+                            <template x-for="folder in folders" :key="folder.id">
+                                <tr class="hover:bg-gray-50/50 transition cursor-pointer group" @click="activeFolder = folder.id">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <svg class="w-8 h-8 text-gray-300 group-hover:text-black transition" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"></path></svg>
+                                            <span class="font-bold text-black text-sm" x-text="folder.name"></span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4" x-text="folder.count + ' Foto'"></td>
+                                    <td class="px-6 py-4 font-bold text-black" x-text="folder.size"></td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="text-black bg-white border border-gray-200 shadow-sm hover:bg-gray-50 px-4 py-2 rounded-lg text-[10px] font-bold transition">Buka Folder</button>
+                                    </td>
+                                </tr>
+                            </template>
+                            
+                            <tr x-show="folders.length === 0">
+                                <td colspan="4" class="px-6 py-12 text-center text-gray-500 font-medium">Belum ada folder/event. Silakan unggah foto terlebih dahulu.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -138,7 +132,7 @@
                     <template x-for="(photo, index) in photos" :key="index">
                         <div class="bg-white border border-gray-200 rounded-xl overflow-hidden group hover:border-black transition shadow-sm relative cursor-pointer" @click="previewIndex = index">
                             <div class="aspect-square bg-gray-100 relative overflow-hidden">
-                                <img :src="photo.url" class="w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100 group-hover:scale-105 transition duration-300">
+                                <img :src="photo.url" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                                 
                                 <!-- Overlay -->
                                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -151,14 +145,8 @@
                             </div>
                         </div>
                     </template>
-                </div>
-                
-                <!-- Pagination for Gallery -->
-                <div class="mt-6 flex justify-between items-center text-[10px] text-gray-500 font-medium">
-                    <span>Menampilkan 10 dari 1.240 foto di folder ini</span>
-                    <div class="flex gap-2">
-                        <button class="px-3 py-1.5 border border-gray-200 rounded bg-white text-gray-400 cursor-not-allowed">Previous</button>
-                        <button class="px-3 py-1.5 border border-gray-200 rounded bg-white hover:bg-gray-50 text-black shadow-sm">Next</button>
+                    <div x-show="photos.length === 0" class="col-span-full py-12 text-center flex flex-col items-center justify-center">
+                        <p class="text-sm font-bold text-gray-400">Folder ini kosong.</p>
                     </div>
                 </div>
             </div>

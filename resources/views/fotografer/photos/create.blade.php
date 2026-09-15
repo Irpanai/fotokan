@@ -32,18 +32,29 @@
                 <form action="{{ route('fotografer.photos.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     
-                    <!-- Event Selection -->
-                    <div>
-                        <label for="event_id" class="block text-sm font-bold text-gray-900 mb-2">Pilih Event Olahraga</label>
-                        <select name="event_id" id="event_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-0 focus:border-black transition-colors" required>
-                            <option value="">-- Pilih Event --</option>
-                            @foreach($events as $event)
-                                <option value="{{ $event->id }}" {{ old('event_id') == $event->id ? 'selected' : '' }}>
-                                    {{ $event->nama_event }} - {{ \Carbon\Carbon::parse($event->tanggal)->format('d M Y') }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <p class="text-[10px] text-gray-500 mt-2">Pastikan memilih event yang sesuai agar foto lebih mudah ditemukan pelari.</p>
+                    <!-- Event Selection / Folder Creation -->
+                    <div class="space-y-4">
+                        <div>
+                            <label for="event_id" class="block text-sm font-bold text-gray-900 mb-2">Pilih Event/Folder (Opsional)</label>
+                            <select name="event_id" id="event_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-0 focus:border-black transition-colors">
+                                <option value="">-- Pilih Event yang Sudah Ada --</option>
+                                @foreach($events as $event)
+                                    <option value="{{ $event->id }}" {{ old('event_id') == $event->id ? 'selected' : '' }}>
+                                        {{ $event->nama_event }} - {{ \Carbon\Carbon::parse($event->tanggal_event)->format('d M Y') }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="relative flex items-center py-2">
+                            <div class="flex-grow border-t border-gray-200"></div>
+                            <span class="flex-shrink-0 mx-4 text-gray-400 text-xs font-bold uppercase tracking-wider">ATAU BUAT FOLDER BARU</span>
+                            <div class="flex-grow border-t border-gray-200"></div>
+                        </div>
+                        <div>
+                            <label for="new_folder" class="block text-sm font-bold text-gray-900 mb-2">Nama Folder / Event Baru</label>
+                            <input type="text" name="new_folder" id="new_folder" value="{{ old('new_folder') }}" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-0 focus:border-black transition-colors" placeholder="Contoh: Jakarta Marathon 2026">
+                            <p class="text-[10px] text-gray-500 mt-2">Sistem akan membuatkan folder ini dan mengelompokkan foto Anda secara otomatis.</p>
+                        </div>
                     </div>
 
                     <!-- File Upload -->

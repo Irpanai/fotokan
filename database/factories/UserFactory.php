@@ -30,7 +30,41 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'role' => 'pembeli',
+            'saldo' => 0,
+            'storage_terpakai_mb' => 0,
+            'is_verified' => true,
         ];
+    }
+
+    public function fotografer(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'fotografer',
+            'saldo' => fake()->numberBetween(100000, 5000000),
+            'storage_terpakai_mb' => fake()->numberBetween(100, 10000),
+            'is_verified' => fake()->boolean(80), // 80% verified
+        ]);
+    }
+
+    public function pembeli(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'pembeli',
+            'saldo' => 0,
+            'storage_terpakai_mb' => 0,
+            'is_verified' => true,
+        ]);
+    }
+
+    public function superadmin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'superadmin',
+            'saldo' => 0,
+            'storage_terpakai_mb' => 0,
+            'is_verified' => true,
+        ]);
     }
 
     /**
@@ -40,6 +74,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+            'is_verified' => false,
         ]);
     }
 }

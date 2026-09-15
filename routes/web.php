@@ -39,6 +39,12 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->name('supe
     Route::get('/dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
     Route::post('/withdrawals/{id}/approve', [SuperAdminController::class, 'approveWithdrawal'])->name('withdrawals.approve');
     Route::post('/fotografer/{id}/verify', [SuperAdminController::class, 'verifyFotografer'])->name('fotografer.verify');
+    
+    Route::get('/compliance', [SuperAdminController::class, 'compliance'])->name('compliance');
+    Route::get('/orders', [SuperAdminController::class, 'ledger'])->name('orders');
+    Route::get('/earnings', [SuperAdminController::class, 'withdrawal'])->name('earnings');
+    Route::get('/storage', [SuperAdminController::class, 'storage'])->name('storage');
+    Route::get('/settings', [SuperAdminController::class, 'settings'])->name('settings');
 });
 
 Route::middleware(['auth', 'role:fotografer'])->prefix('fotografer')->name('fotografer.')->group(function () {

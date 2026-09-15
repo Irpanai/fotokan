@@ -38,32 +38,71 @@
                 <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">RAW, JPEG, PNG • MAX 10MB</span>
             </div>
 
-            <!-- Event Selection -->
-            <div class="mb-4">
-                <label for="event_id" class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Pilih Event Olahraga</label>
-                <select name="event_id" id="event_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-0 focus:border-black transition-colors" required>
-                    <option value="">-- Pilih Event --</option>
-                    @foreach($events as $event)
-                        <option value="{{ $event->id }}" {{ old('event_id') == $event->id ? 'selected' : '' }}>
-                            {{ $event->nama_event }} - {{ \Carbon\Carbon::parse($event->tanggal)->format('d M Y') }}
-                        </option>
-                    @endforeach
-                </select>
+            <!-- Event Selection & Folder Creation -->
+            <div class="mb-4 space-y-4">
+                <div>
+                    <label for="event_id" class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Pilih Event/Folder (Opsional)</label>
+                    <select name="event_id" id="event_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-0 focus:border-black transition-colors">
+                        <option value="">-- Pilih Event yang Sudah Ada --</option>
+                        @foreach($events as $event)
+                            <option value="{{ $event->id }}" {{ old('event_id') == $event->id ? 'selected' : '' }}>
+                                {{ $event->nama_event }} - {{ \Carbon\Carbon::parse($event->tanggal_event)->format('d M Y') }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="relative flex items-center py-1">
+                    <div class="flex-grow border-t border-gray-200"></div>
+                    <span class="flex-shrink-0 mx-4 text-gray-400 text-[9px] font-bold uppercase tracking-widest">ATAU BUAT FOLDER BARU</span>
+                    <div class="flex-grow border-t border-gray-200"></div>
+                </div>
+                <div>
+                    <label for="new_folder" class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Nama Folder / Event Baru</label>
+                    <input type="text" name="new_folder" id="new_folder" value="{{ old('new_folder') }}" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-0 focus:border-black transition-colors" placeholder="Contoh: Jakarta Marathon 2026">
+                    <p class="text-[9px] text-gray-400 mt-2 font-medium">Sistem otomatis membuatkan folder untuk foto Anda.</p>
+                </div>
             </div>
 
             <!-- Dropzone (File Input) -->
-            <div class="border-2 border-dashed border-gray-300 rounded-xl bg-gray-50/50 flex flex-col items-center justify-center py-8 hover:border-black hover:bg-gray-50 transition relative overflow-hidden group flex-grow mb-4">
-                <input type="file" name="photo" id="photo" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/jpeg,image/png,image/jpg" required>
-                <div class="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center mb-4 group-hover:bg-black group-hover:border-black group-hover:text-white transition-colors">
-                    <svg class="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+            <div x-data="{ fileName: '', previewUrl: '' }" class="border-2 border-dashed border-gray-300 rounded-xl bg-gray-50/50 flex flex-col items-center justify-center py-8 hover:border-black hover:bg-gray-50 transition relative overflow-hidden group flex-grow mb-4" :class="{ 'border-black bg-gray-50': fileName }">
+                <input type="file" name="photo" id="photo" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/jpeg,image/png,image/jpg" required
+                    @change="
+                        if($event.target.files.length > 0) {
+                            fileName = $event.target.files[0].name;
+                            previewUrl = URL.createObjectURL($event.target.files[0]);
+                        } else {
+                            fileName = '';
+                            previewUrl = '';
+                        }
+                    ">
+                
+                <!-- If no file is selected -->
+                <div x-show="!fileName" class="flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center mb-4 group-hover:bg-black group-hover:border-black group-hover:text-white transition-colors">
+                        <svg class="w-5 h-5 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                    </div>
+                    <h3 class="text-base font-bold text-black mb-1">Pilih atau Tarik File Ke Sini</h3>
+                    <p class="text-[10px] text-gray-500 font-medium mb-4">Maksimal ukuran file 10MB.</p>
+                    <div class="flex gap-2">
+                        <span class="px-2 py-1 bg-white border border-gray-200 rounded text-[9px] font-bold text-gray-400">JPG</span>
+                        <span class="px-2 py-1 bg-white border border-gray-200 rounded text-[9px] font-bold text-gray-400">PNG</span>
+                    </div>
                 </div>
-                <h3 class="text-base font-bold text-black mb-1">Pilih atau Tarik File Ke Sini</h3>
-                <p class="text-[10px] text-gray-500 font-medium mb-4">Maksimal ukuran file 10MB.</p>
-                <div class="flex gap-2">
-                    <span class="px-2 py-1 bg-white border border-gray-200 rounded text-[9px] font-bold text-gray-400">JPG</span>
-                    <span class="px-2 py-1 bg-white border border-gray-200 rounded text-[9px] font-bold text-gray-400">PNG</span>
+
+                <!-- If file is selected -->
+                <div x-show="fileName" class="flex flex-col items-center" style="display: none;">
+                    <img :src="previewUrl" class="w-32 h-32 object-cover rounded-lg shadow-sm mb-3">
+                    <span class="text-xs font-bold text-black" x-text="fileName"></span>
+                    <span class="text-[10px] text-green-600 font-bold mt-1">Siap diunggah!</span>
                 </div>
             </div>
+            
+            @if(session('success'))
+                <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 text-green-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span class="text-xs font-bold">{{ session('success') }}</span>
+                </div>
+            @endif
             
             @if ($errors->any())
                 <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -176,8 +215,7 @@
 
         <!-- Photo Grid -->
         <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-gray-50/50">
-            
-            <!-- Photo Card 1 (Aktif) -->
+            @forelse($photos as $photo)
             <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm flex flex-col group relative">
                 <div class="absolute top-3 left-3 z-10 bg-white rounded shadow-sm">
                     <input type="checkbox" class="m-2 rounded border-gray-300 text-black focus:ring-black cursor-pointer">
@@ -187,77 +225,32 @@
                 </div>
                 
                 <div class="relative w-full aspect-video bg-gray-100 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1552674605-15c2145e9ca4?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale" alt="Preview">
-                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <span class="text-lg font-black text-white/50 tracking-widest uppercase transform -rotate-12 border border-white/30 px-3 py-1 rounded">© JEPRET PREVIEW</span>
+                    <img src="{{ Storage::url($photo->file_watermark) }}" class="w-full h-full object-cover" alt="Preview">
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                        <!-- hover overlay if needed -->
                     </div>
                 </div>
                 
                 <div class="p-4 flex flex-col flex-grow">
                     <div class="flex justify-between items-start mb-2">
-                        <h3 class="text-xs font-black text-black uppercase tracking-wider">CFD_MURJANI_8821.JPG</h3>
-                        <span class="text-[9px] font-bold text-gray-400">24.2 MB</span>
+                        <h3 class="text-xs font-black text-black uppercase tracking-wider truncate" title="{{ basename($photo->file_asli) }}">{{ Str::limit(basename($photo->file_asli), 20) }}</h3>
+                        <span class="text-[9px] font-bold text-gray-400">10.0 MB</span>
                     </div>
                     <p class="text-[9px] font-medium text-gray-500 mb-4 leading-relaxed">
-                        Sony A7 IV • 24 MP • f/2.8 • 1/1250s • ISO 200
+                        Event: {{ $photo->event->nama_event ?? 'Tidak ada Event' }}
+                        @if($photo->ai_tags)
+                            <br>Tags: {{ implode(', ', json_decode($photo->ai_tags, true)) }}
+                        @endif
                     </p>
                     
                     <div class="bg-gray-50 rounded-lg p-3 grid grid-cols-2 gap-4 mb-4 mt-auto">
                         <div>
                             <span class="text-[9px] font-bold text-gray-400 block mb-0.5">Harga Satuan:</span>
-                            <span class="text-xs font-bold text-black">Rp 20.000 <span class="text-[9px] font-medium text-gray-400">(Net Rp 14.000)</span></span>
+                            <span class="text-xs font-bold text-black">Rp {{ number_format($photo->harga, 0, ',', '.') }} <span class="text-[9px] font-medium text-gray-400">(Net Rp {{ number_format($photo->harga * 0.7, 0, ',', '.') }})</span></span>
                         </div>
                         <div>
                             <span class="text-[9px] font-bold text-gray-400 block mb-0.5">Statistik Penjualan:</span>
-                            <span class="text-[9px] font-medium text-gray-500">42 tayangan • <span class="text-green-600 font-bold">6 terjual (Rp 84.000)</span></span>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-between items-center pt-2">
-                        <div class="flex gap-2 text-gray-400">
-                            <button class="hover:text-black transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
-                            <button class="hover:text-black transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></button>
-                        </div>
-                        <button class="text-[10px] font-bold text-gray-600 border border-gray-200 bg-white hover:bg-gray-50 px-3 py-1.5 rounded shadow-sm transition">
-                            Ubah Harga
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Photo Card 2 (Draf) -->
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm flex flex-col group relative">
-                <div class="absolute top-3 left-3 z-10 bg-white rounded shadow-sm">
-                    <input type="checkbox" class="m-2 rounded border-gray-300 text-black focus:ring-black cursor-pointer" checked>
-                </div>
-                <div class="absolute top-3 right-3 z-10">
-                    <span class="bg-gray-100/90 backdrop-blur-sm text-gray-600 text-[10px] font-bold px-2 py-1.5 rounded shadow-sm">Draf</span>
-                </div>
-                
-                <div class="relative w-full aspect-video bg-gray-100 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-90" alt="Preview">
-                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
-                        <span class="text-lg font-black text-white/50 tracking-widest uppercase transform -rotate-12 border border-white/30 px-3 py-1 rounded">© JEPRET PREVIEW</span>
-                    </div>
-                </div>
-                
-                <div class="p-4 flex flex-col flex-grow">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="text-xs font-black text-black uppercase tracking-wider">CFD_MURJANI_8822.JPG</h3>
-                        <span class="text-[9px] font-bold text-gray-400">31.8 MB</span>
-                    </div>
-                    <p class="text-[9px] font-medium text-gray-500 mb-4 leading-relaxed">
-                        Sony A7 IV • 24 MP • f/2.0 • 1/2000s • ISO 160
-                    </p>
-                    
-                    <div class="bg-gray-50 rounded-lg p-3 grid grid-cols-2 gap-4 mb-4 mt-auto">
-                        <div>
-                            <span class="text-[9px] font-bold text-gray-400 block mb-0.5">Harga Satuan:</span>
-                            <span class="text-xs font-bold text-black">Rp 20.000 <span class="text-[9px] font-medium text-gray-400">(Net Rp 14.000)</span></span>
-                        </div>
-                        <div>
-                            <span class="text-[9px] font-bold text-gray-400 block mb-0.5">Statistik Penjualan:</span>
-                            <span class="text-[9px] font-medium text-gray-400">0 tayangan • 0 terjual (Belum Tayang)</span>
+                            <span class="text-[9px] font-medium text-gray-500">0 tayangan • <span class="text-gray-400 font-bold">0 terjual</span></span>
                         </div>
                     </div>
                     
@@ -266,61 +259,18 @@
                             <button class="hover:text-black transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></button>
                             <button class="hover:text-black transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></button>
                         </div>
-                        <button class="text-[10px] font-bold text-white bg-black hover:bg-gray-800 px-3 py-1.5 rounded shadow-sm transition">
-                            Terbitkan Foto
+                        <button class="text-[10px] font-bold text-gray-600 border border-gray-200 bg-white hover:bg-gray-50 px-3 py-1.5 rounded shadow-sm transition">
+                            Ubah Harga
                         </button>
                     </div>
                 </div>
             </div>
-
-            <!-- Photo Card 3 (Terjual Eksklusif) -->
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm flex flex-col group relative opacity-80">
-                <div class="absolute top-3 left-3 z-10 bg-white rounded shadow-sm">
-                    <input type="checkbox" class="m-2 rounded border-gray-300 text-black focus:ring-black cursor-pointer">
-                </div>
-                <div class="absolute top-3 right-3 z-10">
-                    <span class="bg-black/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1.5 rounded shadow-sm">Terjual Habis (Eksklusif)</span>
-                </div>
-                
-                <div class="relative w-full aspect-video bg-gray-100 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale" alt="Preview">
-                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center">
-                        <span class="text-lg font-black text-white/40 tracking-widest uppercase transform -rotate-12 border border-white/20 px-3 py-1 rounded">© JEPRET PREVIEW</span>
-                    </div>
-                </div>
-                
-                <div class="p-4 flex flex-col flex-grow">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="text-xs font-black text-gray-500 uppercase tracking-wider">CFD_MURJANI_8824.JPG</h3>
-                        <span class="text-[9px] font-bold text-gray-400">28.4 MB</span>
-                    </div>
-                    <p class="text-[9px] font-medium text-gray-400 mb-4 leading-relaxed">
-                        Sony A7 IV • 24 MP • f/4.0 • 1/800s • ISO 100
-                    </p>
-                    
-                    <div class="bg-gray-50 rounded-lg p-3 grid grid-cols-2 gap-4 mb-4 mt-auto">
-                        <div>
-                            <span class="text-[9px] font-bold text-gray-400 block mb-0.5">Harga Lisensi Penuh:</span>
-                            <span class="text-xs font-bold text-gray-500">Rp 75.000 <span class="text-[9px] font-medium text-gray-400">(Net Rp 52.500)</span></span>
-                        </div>
-                        <div>
-                            <span class="text-[9px] font-bold text-gray-400 block mb-0.5">Statistik Penjualan:</span>
-                            <span class="text-[9px] font-medium text-gray-500">118 tayangan • <span class="text-green-700 font-bold">1 Terjual Komersial</span></span>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-between items-center pt-2">
-                        <div class="flex gap-2 text-gray-300">
-                            <button class="hover:text-gray-500 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></button>
-                            <button class="hover:text-gray-500 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></button>
-                        </div>
-                        <button class="text-[10px] font-bold text-gray-400 border border-gray-200 bg-white hover:bg-gray-50 px-3 py-1.5 rounded shadow-sm transition">
-                            Lihat Lisensi
-                        </button>
-                    </div>
-                </div>
+            @empty
+            <div class="col-span-full py-12 text-center flex flex-col items-center justify-center">
+                <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <p class="text-sm font-bold text-gray-400">Belum ada foto yang diunggah.</p>
             </div>
-
+            @endforelse
         </div>
 
         <div class="p-6 border-t border-gray-100 flex justify-between items-center">

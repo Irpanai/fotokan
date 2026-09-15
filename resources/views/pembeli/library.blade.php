@@ -43,10 +43,10 @@
             @forelse($transactions as $transaction)
             <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)] group">
                 <div class="relative aspect-[4/3] bg-gray-100 overflow-hidden">
-                    <img src="{{ Storage::url($transaction->photo->original_path ?? '') }}" alt="Purchased Photo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <img src="{{ Storage::url($transaction->photo->file_watermark ?? '') }}" alt="Purchased Photo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-4">
-                        <a href="{{ Storage::url($transaction->photo->original_path ?? '') }}" download class="bg-white text-black text-[10px] font-bold px-4 py-2 rounded-full flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all">
+                        <a href="{{ Storage::url($transaction->photo->file_asli ?? '') }}" download class="bg-white text-black text-[10px] font-bold px-4 py-2 rounded-full flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                             Download Master
                         </a>
